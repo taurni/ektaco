@@ -1,56 +1,67 @@
 import React, {Component} from "react";
 import "./table.css";
 import { Data } from "../../users.json";
+import moment from "moment";
 
-const isWeekend = (day) => {
-    if( day === "L" || day === "P"){
-       return " table__cel--weekend";
-    }else{
-        return "";
-    }
-};
+
+moment.locale('ee');
+moment.updateLocale('ee', {
+    months : [
+        "Jaanuar", "Veebruar", "Märts", "Aprill", "Mai", "Juuni", "Juuli",
+        "August", "September", "Oktoober", "November", "Detsember"
+    ]
+});
+moment.updateLocale('ee', {
+    weekdaysMin : ["P", "E", "T", "K", "N", "R", "L"]
+});
 
 class Table extends Component {
-    days = [
-        {number: 1, name: "E"},
-        {number: 2, name: "T"},
-        {number: 3, name: "K"},
-        {number: 4, name: "N"},
-        {number: 5, name: "R"},
-        {number: 6, name: "L"},
-        {number: 7, name: "P"},
-        {number: 8, name: "E"},
-        {number: 9, name: "T"},
-        {number: 10, name: "K"},
-        {number: 11, name: "N"},
-        {number: 12, name: "R"},
-        {number: 13, name: "L"},
-        {number: 14, name: "P"},
-        {number: 15, name: "E"},
-        {number: 16, name: "T"},
-        {number: 17, name: "K"},
-        {number: 18, name: "N"},
-        {number: 19, name: "R"},
-        {number: 20, name: "L"},
-        {number: 21, name: "P"},
-        {number: 22, name: "E"},
-        {number: 23, name: "T"},
-        {number: 24, name: "K"},
-        {number: 25, name: "N"},
-        {number: 26, name: "R"},
-        {number: 27, name: "L"},
-        {number: 28, name: "P"},
-        {number: 29, name: "E"},
-        {number: 30, name: "T"},
-    ];
+
+    constructor(props) {
+        super(props);
+
+        this.month = moment();
+        this.state =  {
+            days: []
+        };
+    }
+
+    componentWillMount(){
+        this.setState({days: this.makeDays() })
+    }
+
+    makeDays = () => {
+        const daysInMonth =  this.month.daysInMonth();
+        let firstDay = this.month.startOf('month');
+
+        let days = [];
+        for(let i = 0; i < daysInMonth ; i++){
+            days.push(moment(firstDay));
+            firstDay.add(1, 'days');
+        }
+        return days;
+    };
+
+    nextMonth = () => {
+        this.month.add("months");
+        this.setState({ days: this.makeDays()});
+    };
+
+    prevMonth = () => {
+      this.month.subtract("months");
+       this.setState({ days: this.makeDays()});
+    };
+
     render() {
         return(
+            <div>
             <table>
                 <tbody>
-                <TableHeader fields={this.fields} days={this.days} />
-                {Data.map((user) =>  <TableRow fields={this.fields} days={this.days} name={user.FirstName+" "+user.LastName} key={user.UserId.toString()} hours={user.hours} />)}
+                <TableHeader fields={this.fields} days={this.state.days} next={this.nextMonth} prev={this.prevMonth} />
+                {Data.map((user) =>  <TableRow fields={this.fields} days={this.state.days} {...user} key={user.UserId.toString()} hours={user.hours} />)}
                 </tbody>
             </table>
+            </div>
         )
     }
 }
@@ -59,17 +70,25 @@ class TableHeader extends Component {
     render() {
         return (
             <tr>
-                <th className={"table__cel table__cel--head table__cel--border-r"} >&nbsp;</th>
+                <th className={"table__cel table__cel--head table__cel--border-r table__cel--controls"} >
+                    <button className={"table__button"} onClick={this.props.prev }>&lt;</button>
+                    {this.props.days[0].format("MMMM")}
+                    <button className={"table__button"} onClick={this.props.next}>&gt;</button>
+                </th>
                 <td className={"table__cel table__cel--head "} >Töö-tunnid</td>
                 <td className={"table__cel table__cel--head "} >Üle-tunnid</td>
                 <td className={"table__cel table__cel--head  table__cel--border-r"} >Norm-tunnid</td>
-                {this.props.days.map((day, index) => <th className={"table__cel--head" +isWeekend(day.name)} key={index}>{day.number}<span className={"table__day"}>{day.name}</span></th>)}
+                {this.props.days.map((day, index) =>  <th className={"table__cel--head" +isWeekend(day)} key={day.format("D")}>{day.format("D")}<span className={"table__day"}>{day.format("dd")}</span></th>)}
             </tr>
         )
     }
 }
 
 class TableRow extends Component {
+    information(id, name, date){
+       alert("userid: "+id+"\nname: "+name +"\ndate: "+ date.format("DD.MM.YYYY"))
+    }
+
     render() {
         return(
             <tr>
@@ -79,16 +98,26 @@ class TableRow extends Component {
                             defaultValue="Bob"
                             type="checkbox"
                             ref={(input) => this.input = input} />
-                        {this.props.name}
+                        {this.props.FirstName+" "+this.props.LastName}
                     </label>
                 </td>
                 <td className={"table__cel table__cel--info"} >{this.props.hours ? this.props.hours.worked : ""}</td>
                 <td className={"table__cel table__cel--info"} >{this.props.hours ? this.props.hours.extra : ""}</td>
                 <td className={"table__cel table__cel--info table__cel--border-r"} >{this.props.hours ? this.props.hours.normal : ""}</td>
-                {this.props.days.map((day, index) => <td className={"table__cel table__cel--day"+isWeekend(day.name)} key={index} /> )}
+                {this.props.days.map((day, index) => <td onClick={() => this.information(this.props.UserId, this.props.FirstName+" "+this.props.LastName, day)} className={"table__cel table__cel--day"+isWeekend( day )} key={index} /> )}
             </tr>
         )
     }
 }
+
+const isWeekend = (day) => {
+    const nrOfDay = day.day();
+
+    if( nrOfDay === 0 || nrOfDay === 6){
+        return " table__cel--weekend";
+    }else{
+        return "";
+    }
+};
 
 export default Table;
