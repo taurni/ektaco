@@ -1,0 +1,77 @@
+@import "../../variables";
+
+//Colors
+$border-color: $gray-2;
+$border-color-h: $blue-3;
+$border-color-v: $gray-1;
+$border-color-vb: $black-1;
+$cell-bg: $blue-4;
+$cell-bg-weekend: $green-1;
+$cell-bg-h: $yellow-1;
+$text-color: $blue-2;
+$header-bg: $blue-1;
+
+//Borders
+$border-horizontal: 1px solid $border-color-v;
+$border-horizontal: 2px solid $border-color-h;
+$border-vertical-strong: 1px solid $border-color-vb;
+
+
+table {
+  border-collapse: collapse;
+  border: 1px solid $border-color;
+  margin: 30px 15px;
+}
+
+.table__cel {
+  min-width: 50px;
+  height: 45px;
+  border-right: $border-horizontal;
+  border-bottom: $border-horizontal;
+  text-align: center;
+
+  &--head {
+    font-weight: 400;
+    border-right: $border-horizontal;
+    border-bottom: $border-horizontal;
+    background: linear-gradient(to bottom, #ffffff 12%,#{$cell-bg} 100%);
+    font-size: .8em;
+    color: $header-bg;
+  }
+
+  &--user {
+    white-space: nowrap;
+    border-right: $border-vertical-strong;
+    min-width: 200px;
+    text-align: left;
+    color: $header-bg;
+  }
+
+  &--info {
+    color: $text-color;
+  }
+
+  &--weekend {
+    background-color: $cell-bg-weekend;
+  }
+
+  &--border-r {
+    border-right: $border-vertical-strong;
+  }
+
+  &--day {
+    cursor: pointer;
+
+    &:hover {
+      background-color: $cell-bg-h !important;
+    }
+  }
+
+  tr:nth-child(odd) &:not(.table__cel--weekend) {
+    background-color: $cell-bg;
+  }
+}
+
+.table__day {
+  display: block;
+}

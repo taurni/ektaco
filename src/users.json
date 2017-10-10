@@ -1,0 +1,68 @@
+{"Data":
+[{
+	"FirstName": "Timo",
+	"LastName": "Mägi",
+	"UserId": 1
+},
+{
+	"FirstName": "Andrus",
+	"LastName": "Pihlakas",
+	"UserId": 2,
+	"hours": {
+		"normal": "20:00",
+		"worked": "18:30",
+        "extra": "-01:30"
+	}
+},
+{
+	"FirstName": "Jüri",
+	"LastName": "Toomingas",
+	"UserId": 3,
+	"hours": {
+		"normal": "10:00",
+		"worked": "22:00",
+        "extra": "12:00"
+	}
+},
+{
+	"FirstName": "Juss",
+	"LastName": "Tõnspoeg",
+	"UserId": 4,
+	"hours": {
+		"normal": "13:00",
+		"worked": "23:15",
+        "extra": "00:15"
+	}
+},
+{
+	"FirstName": "Andrus",
+	"LastName": "Kallaste",
+	"UserId": 5
+},
+{
+	"FirstName": "Välek",
+	"LastName": "Vibulane",
+	"UserId": 6
+},
+{
+	"FirstName": "Hillar",
+	"LastName": "Tamm",
+	"UserId": 7
+},
+{
+	"FirstName": "Vaike",
+	"LastName": "Pall",
+	"UserId": 8
+},
+{
+	"FirstName": "Tarmo",
+	"LastName": "Lepp",
+	"UserId": 9
+},
+{
+	"FirstName": "Anne",
+	"LastName": "Kallas",
+	"UserId": 10
+}
+]
+}
