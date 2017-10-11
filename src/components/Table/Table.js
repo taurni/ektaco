@@ -2,18 +2,10 @@ import React, {Component} from "react";
 import "./table.css";
 import { Data } from "../../users.json";
 import moment from "moment";
+import et from "moment/locale/et";
 
 
-moment.locale('ee');
-moment.updateLocale('ee', {
-    months : [
-        "Jaanuar", "Veebruar", "Märts", "Aprill", "Mai", "Juuni", "Juuli",
-        "August", "September", "Oktoober", "November", "Detsember"
-    ]
-});
-moment.updateLocale('ee', {
-    weekdaysMin : ["P", "E", "T", "K", "N", "R", "L"]
-});
+moment.locale('et');
 
 class Table extends Component {
 
@@ -70,10 +62,12 @@ class TableHeader extends Component {
     render() {
         return (
             <tr>
-                <th className={"table__cel table__cel--head table__cel--border-r table__cel--controls"} >
+                <th className={"table__cel table__cel--head table__cel--border-r"} >
+                    <div className={"table__cel--controls"}>
                     <button className={"table__button"} onClick={this.props.prev }>&lt;</button>
                     {this.props.days[0].format("MMMM")}
                     <button className={"table__button"} onClick={this.props.next}>&gt;</button>
+                    </div>
                 </th>
                 <td className={"table__cel table__cel--head "} >Töö-tunnid</td>
                 <td className={"table__cel table__cel--head "} >Üle-tunnid</td>
